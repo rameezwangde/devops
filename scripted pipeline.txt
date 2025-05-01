@@ -1,0 +1,28 @@
+script:
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/rameezwangde/devops.git'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                     bat 'copy index.html C:\\xampp\\htdocs\\myweb\\index.html'
+                     bat 'copy 1.html C:\\xampp\\htdocs\\myweb\\1.html'
+                      bat 'copy 2.html C:\\xampp\\htdocs\\myweb\\2.html'
+                }
+            }
+        }
+    }
+}
+Download xampp first start apache and sql server
+Go to c drive where xampp is installed 
+Then go to ht docs folder inside tht create myweb folder
+Paste index.html from git to this folder
+To access: 
+localhost/myweb/index.html
