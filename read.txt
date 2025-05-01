@@ -1,0 +1,26 @@
+1. Demonstrate use of git commands to push and pull 3 html files from Github account.
+Steps:
+git config --global user.name "Your Full Name"
+git config --global user.email "your@email.com"
+
+
+mkdir html-demo
+cd html-demo
+echo "<!DOCTYPE html><html><body><h1>File 1</h1></body></html>" > file1.html
+echo "<!DOCTYPE html><html><body><h1>File 2</h1></body></html>" > file2.html
+echo "<!DOCTYPE html><html><body><h1>File 3</h1></body></html>" > file3.html
+
+git init
+git remote add origin https://github.com/rameezwangde/devops.git
+git add .
+git commit -m"add 3 html files"
+git branch -M main
+git push -u origin main
+After this add a file on github directly nd then run git pull
+git pull origin main
+
+For pull:
+mkdir html-clone
+cd html-clone
+git clone https://github.com/rameezwangde/devops.git
+replace devops with new repo name
