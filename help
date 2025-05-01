@@ -1,0 +1,285 @@
+1. Demonstrate use of git commands to push and pull 3 html files from Github account.
+Steps:
+git config --global user.name "Your Full Name"
+git config --global user.email "your@email.com"
+
+create a new repo and perform 
+
+mkdir html-demo
+cd html-demo
+for git bash:
+set +H
+echo '<!DOCTYPE html><html><body><h1>File 1</h1></body></html>' > file1.html
+echo '<!DOCTYPE html><html><body><h1>File 2</h1></body></html>' > file2.html
+echo '<!DOCTYPE html><html><body><h1>File 3</h1></body></html>' > file3.html
+
+for cmd:
+echo "<!DOCTYPE html><html><body><h1>File 1</h1></body></html>" > file1.html
+echo "<!DOCTYPE html><html><body><h1>File 2</h1></body></html>" > file2.html
+echo "<!DOCTYPE html><html><body><h1>File 3</h1></body></html>" > file3.html
+
+git init
+git remote add origin https://github.com/rameezwangde/devops.git
+git add .
+git commit -m"add 3 html files"
+git branch -M main
+git push -u origin main
+After this add a file on github directly nd then run git pull
+git pull origin main
+
+For pull:
+mkdir html-clone
+cd html-clone
+git clone https://github.com/rameezwangde/devops.git
+
+..................................................................................................................................
+
+2. Demonstrate Building java program (addition of 2 numbers) through Jenkins.
+code:
+public class Addition {
+    public static void main(String[] args) {
+        int a = 10, b = 20;
+        int sum = a + b;
+        System.out.println("Sum of " + a + " and " + b + " is: " + sum);
+    }
+}
+C:\ProgramData\Jenkins\.jenkins\secrets\initialAdminPassword
+Go to jenkins click freestyle project
+Click "Add build step"
+
+
+Choose "Execute Windows batch command"
+cd "C:\Users\RAMEEZ\OneDrive\Desktop\Devops" - check this in vs code terminal as file path will be different
+javac Addition.java
+java Addition
+
+.............................................................................................................................................
+http://localhost:8080 - jenkins access
+3.. Demonstrate Continuous Integration process in Jenkins. Build a java program every 2 minutes (addition of two numbers) residing in Github repository. 
+public class Addition {
+    public static void main(String[] args) {
+        int a = 10, b = 20;
+        int sum = a + b;
+        System.out.println("Sum of " + a + " and " + b + " is: " + sum);
+    }
+}
+Go to jenkins click free style project
+Under scm paste github repo link
+ Add Build Step
+Under Build section:
+Click Add build step → "Execute Windows batch command"
+javac Addition.java
+java Addition
+Skip cd for github one
+cd %WORKSPACE%
+Why It's Used
+It makes your build script portable and safe across jobs, without hardcoding paths like:
+bat
+cd C:\Users\RAMEEZ\Desktop\Devops
+
+
+5. Add Build Trigger (Every 2 Minutes)
+Scroll to Build Triggers and check:
+✅ Build periodically
+ Then in the box, type:
+CopyEdit
+H/2 * * * *
+..........................................................................................
+4. Demonstrate CI/CD in Jenkins. Consider 3 html files in Github repository and write a scripted pipeline to deploy on Xampp server. 
+
+Script:
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/rameezwangde/devops.git'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                     bat 'copy index.html C:\\xampp\\htdocs\\myweb\\index.html'
+                     bat 'copy 1.html C:\\xampp\\htdocs\\myweb\\1.html'
+                      bat 'copy 2.html C:\\xampp\\htdocs\\myweb\\2.html'
+                }
+            }
+        }
+    }
+}
+
+Download xampp first start apache and sql server
+Go to c drive where xampp is installed 
+Then go to ht docs folder inside tht create myweb folder
+Paste index.html from git to this folder
+To access: 
+localhost/myweb/index.html
+
+...........................................................................................................................................
+5.Demonstrate CI/CD in Jenkins. Consider 3 html files in Github repository and write a declarative pipeline to deploy on Xampp server.
+
+3 files in xammp ht docs my web folder
+Then write this script in Jenkinsfile 
+Script:
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/rameezwangde/devops.git'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                     bat 'copy index.html C:\\xampp\\htdocs\\myweb\\index.html'
+                     bat 'copy 1.html C:\\xampp\\htdocs\\myweb\\1.html'
+                      bat 'copy 2.html C:\\xampp\\htdocs\\myweb\\2.html'
+                }
+            }
+        }
+    }
+}
+Open jenkins
+Create job
+Pipeline
+Select pipeline from scm
+Scm git
+Add repo url 
+Specify branch
+Check lightweight checkout
+Build now
+...........................................................................................................................................
+
+6. Write a Selenium script to perform automated testing.
+ 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+import time
+
+# Setup Chrome driver using webdriver-manager
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+
+# Open Google and search for GeeksforGeeks
+driver.get("http://www.google.com")
+search_box = driver.find_element(By.NAME, "q")
+search_box.send_keys("GeeksforGeeks")
+search_box.send_keys(Keys.ENTER)
+
+time.sleep(30)  # Let the user see the result
+driver.quit()
+
+print("Sample test Successful")
+
+pip install selenium
+Create and activate virtual environment:
+python -m venv selenium-env
+.\selenium-env\Scripts\activate  
+pip install selenium webdriver-manager
+
+...................................................................................................................................................
+7. Create an image of php project and push on Dockerhub repository.
+Firstly create a docker folder:
+Dockerfile
+# Use PHP CLI (Command Line Interface) as the base image
+FROM php:8.4-cli
+
+# Copy all files from the current directory to /var/www/html inside the container
+COPY . /var/www/html
+
+# Set the working directory
+WORKDIR /var/www/html
+
+# Expose port 5000 for accessing the application
+EXPOSE 5000
+
+# Start the PHP built-in server on port 5000
+CMD ["php", "-S", "0.0.0.0:5000"]
+
+Index.php:
+
+<?php
+echo "Hello from Dockerized PHP!";
+?>
+Save these files in the docker folder.
+Open docker desktop:
+Open terminal
+Cd “file path”
+Build the Docker image:
+docker build -t yourdockerhubname/php-server .
+Run the Docker container on port 5000:
+docker run -d -p 5000:5000 yourdockerhubname/php-server
+
+http://localhost:5000
+........................................................................................................................................................
+8. Demonstrate use of docker commands to pull ubuntu official image, create a file and push updated image on Dockerhub.
+Great! Here's a full step-by-step demonstration using Docker commands to:
+Pull the official Ubuntu image
+
+
+Create a file inside a running container
+
+
+Commit the changes as a new image
+
+
+Push that updated image to Docker Hub
+
+
+
+🧱 Step-by-Step Guide
+
+✅ Step 1: Pull the Official Ubuntu Image
+docker pull ubuntu
+
+
+✅ Step 2: Run a Container from Ubuntu Image
+
+docker run -it ubuntu
+
+This will open a shell inside the container. Now run:
+
+apt update
+apt install -y nano    # or use touch if nano not needed
+echo "Hello from Docker Ubuntu!" > hello.txt
+exit
+
+Now you’ve created a hello.txt file inside the container and exited.
+
+✅ Step 3: Get the Container ID
+
+docker ps -a
+
+Note the CONTAINER ID of the one you just exited.
+
+✅ Step 4: Commit the Container as a New Image
+
+docker commit <container-id> yourdockerhubname/ubuntu-with-hello
+
+Example:
+docker commit abc1234 yourdockerhubname/ubuntu-with-hello
+
+
+✅ Step 5: Push the New Image to Docker Hub
+Log in to Docker Hub:
+docker login
+
+Push your image:
+
+docker push yourdockerhubname/ubuntu-with-hello
+
+
+✅ To Verify
+Anyone can now pull your updated image:
+
+docker pull yourdockerhubname/ubuntu-with-hello
+docker run -it yourdockerhubname/ubuntu-with-hello
+cat hello.txt
